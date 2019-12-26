@@ -151,4 +151,5 @@ def calc_fantasy_stats(df):
     Returns:
         df_fantasy (Frane): original df + additional fantasy points columns
     """
-    pass
+    scoring = {}
+    
