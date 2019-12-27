@@ -140,8 +140,9 @@ def get_all_seasons_df(season_urls=None,player_id=None,season_years=[2019,2018,2
         print(f'[!] Error during concatenation for player {player_id}. Returning list instead of df...')
         return df_list
     
+
     
-def calc_fantasy_stats(df):
+def calc_fantasy_stats(df,pts=None):
     """
     Calculates FantasyPoints from corresponding data columns.
     
@@ -151,5 +152,29 @@ def calc_fantasy_stats(df):
     Returns:
         df_fantasy (Frane): original df + additional fantasy points columns
     """
-    scoring = {}
     
+    if pts is None:
+        points = pd.read_csv('fantasy_points_conversion.csv',index_col=0)
+        pts = dict(zip(points['STAT'],points['PTS']))
+
+
+    df_fantasy = df.copy()
+    
+    pts_cols= []
+    for k,v in pts.items():
+        col_name = k+'_pts'
+        df_fantasy[col_name] = df_fantasy[k].apply(lambda x: x*pts[k])
+        pts_cols.append(col_name)
+
+
+    df_fantasy['total_pts'] = df_fantasy.apply(lambda x: x[pts_cols].sum(),axis=1)
+    return df_fantasy
+
+    
+def save_player_df(df,player_id=None):
+    if player_id is None:
+        player_id=df['player_id'][0]
+        
+    filename=f"data/players/player_id_{player_id}.csv"
+    df.to_csv(filename)
+            
