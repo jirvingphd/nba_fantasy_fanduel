@@ -1,0 +1,22 @@
+,COLUMN,MEANING
+1,W/L,Win/Loss
+2,MIN,Minutes Played
+3,PTS,Points
+4,FGM,Field Goals Made
+5,FGA,Field Goals Attempted
+6,FG%,Field Goal Percentage
+7,3PM,3 Point Field Goals Made
+8,3PA,3 Point Field Goals Attempted
+9,3P%,3 Point Field Goals Percentage
+10,FTM,Free Throws Made
+11,FTA,Free Throws Attempted
+12,FT%,Free Throw Percentage
+13,OREB,Offensive Rebounds
+14,DREB,Defensive Rebounds
+15,REB,Rebounds
+16,AST,Assists
+17,STL,Steals
+18,BLK,Blocks
+19,TOV,Turnovers
+20,PF,Personal Fouls
+21,+/-,Plus-Minus
