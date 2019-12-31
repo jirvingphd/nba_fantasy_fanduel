@@ -42,6 +42,7 @@ url = "https://stats.nba.com/player/1628369/boxscores-traditional/"
 #     df[float_cols] = df[float_cols].astype('float')
 
 
+
 def get_season_df(url,driver=None):
     """
     Loads the provided url. Intended for: stats.nba.com/player/{player_id}}/boxscores-traditional/)
@@ -56,19 +57,33 @@ def get_season_df(url,driver=None):
     from selenium import webdriver
     import time
     import pandas as pd
+    import numpy as np
     if driver is None:
         driver = webdriver.Chrome()
         
     driver.get(url)
-    time.sleep(1)
+    time.sleep(2)
     soup = BeautifulSoup(driver.page_source,features='lxml')
 
     ## Get all table rows
     row_tags = soup.find_all('tr')
 
     ## Get header/column names
-    head = row_tags[0]
-    column_names = [t.text for t in head.find_all('th')]
+    try:
+        head = row_tags[0]
+    except:
+        head=row_tags
+        print(f"For url {url}, row_tags = \n{row_tags}")
+        return np.nan
+        
+    try:
+        theader = head.find_all('th')
+        column_names = [t.text for t in theader]
+       
+    except:
+        print(f"For url {url}, theader = \n{theader}")
+        return np.nan
+       
 
     data = []
     for row in row_tags[1:]:
@@ -215,12 +230,22 @@ def save_player_df(df,player_id=None,verbose=True):
         player_id (str, optional): Player_id for filename. Defaults to None, 
             which extracts it from the df..
     """
+    import numpy as np
+    if isinstance(df,list):
+        if player_id is not None: 
+            print(f"df for {player_id}")
+        return np.nan
+    
     if player_id is None:
         player_id=df['player_id'][0]
         
+
+    
     filename=f"data/players/player_id_{player_id}.csv"
     df.to_csv(filename)
     
     if verbose:
         print(f"[i] df saved as {filename}.")
+        
+    return filename
             
